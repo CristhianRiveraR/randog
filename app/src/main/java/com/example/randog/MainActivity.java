@@ -39,10 +39,11 @@ public class MainActivity extends AppCompatActivity {
     TextView txtPrb;
     RequestQueue requestQueue;
     ImageView imgDog;
-
+    String pesoImg;
+    String urlImg =".mp4";
     //Pruebas
 
-    final String imgURLPrb  = "https://www.google.com/images/srpr/logo11w.png";
+
 
     //
     static final String URL = "https://random.dog/woof.json";
@@ -59,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
         btnConsultar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 stringRequest();
-
-
+                //setDataToComponents();
             }
         });
 
@@ -73,37 +74,63 @@ public class MainActivity extends AppCompatActivity {
         imgDog = findViewById(R.id.imgDog);
     }
 
-    private void stringRequest(){
+    private void callStringRequest(){
 
-        StringRequest request = new StringRequest(
-                Request.Method.GET,
-                URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //txtPrb.setText(response);
+        do{
+            stringRequest();
+        }while (urlImg.endsWith(".mp4") || urlImg.endsWith(".gif"));
 
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String pesoImg = jsonObject.getString("fileSizeBytes");
-                            String urlImg = jsonObject.getString("url");
+    }
 
-                            txtPrb.setText(pesoImg);
-                            new DownLoadImageTask(imgDog).execute(urlImg);
+    private int stringRequest(){
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+        if(!urlImg.endsWith(".mp4") && !urlImg.endsWith(".gif")){
+            return 1;
+        }
+        else{
+            StringRequest request = new StringRequest(
+                    Request.Method.GET,
+                    URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            //txtPrb.setText(response);
+
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                pesoImg = jsonObject.getString("fileSizeBytes");
+                                urlImg = jsonObject.getString("url");
+
+                                if(urlImg.endsWith(".mp4") || urlImg.endsWith(".gif")){
+                                    stringRequest();
+                                }
+                                else{
+                                    setDataToComponents();
+                                    urlImg =".mp4";
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            int x= 0;
                         }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        int x= 0;
-                    }
-                }
-        );
-        requestQueue.add(request);
+            );
+            requestQueue.add(request);
+            return 0;
+        }
+
+    }
+
+    private void setDataToComponents(){
+        txtPrb.setText(pesoImg);
+        new DownLoadImageTask(imgDog).execute(urlImg);
+
     }
 
     private void fixSsl(){
