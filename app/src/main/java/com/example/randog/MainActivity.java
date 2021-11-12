@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -13,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.randog.resources.DownLoadImageTask;
 
 
 import org.json.JSONException;
@@ -36,7 +38,13 @@ public class MainActivity extends AppCompatActivity {
     Button btnConsultar;
     TextView txtPrb;
     RequestQueue requestQueue;
+    ImageView imgDog;
 
+    //Pruebas
+
+    final String imgURLPrb  = "https://www.google.com/images/srpr/logo11w.png";
+
+    //
     static final String URL = "https://random.dog/woof.json";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 stringRequest();
+
+
             }
         });
 
@@ -60,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private void initCompnents(){
         btnConsultar = findViewById(R.id.btnConsultar);
         txtPrb = findViewById(R.id.txtPrb);
+        imgDog = findViewById(R.id.imgDog);
     }
 
     private void stringRequest(){
@@ -77,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
                             String pesoImg = jsonObject.getString("fileSizeBytes");
                             String urlImg = jsonObject.getString("url");
 
-                            txtPrb.setText(urlImg);
+                            txtPrb.setText(pesoImg);
+                            new DownLoadImageTask(imgDog).execute(urlImg);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -125,33 +137,5 @@ public class MainActivity extends AppCompatActivity {
         // Install the all-trusting host verifier
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
-    private void getPerro(){
-/*
-        StringRequest postRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    String pesoImg = jsonObject.getString("fileSizeBytes");
-                    String urlImg = jsonObject.getString("url");
 
-                    txtPrb.setText(urlImg);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                txtPrb.setText(error.getMessage());
-            }
-        });
-
-        Volley.newRequestQueue(this).add(postRequest);
-        */
-
-
-
-    }
 }
