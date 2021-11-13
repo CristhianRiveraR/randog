@@ -204,13 +204,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-/*
-    private void setDataToComponents(){
-        txtPrb.setText(urlImg);
-        new DownLoadImageTask(imgDog).execute(urlImg);
 
-    }
-*/
     private void fixSsl(){
         TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
