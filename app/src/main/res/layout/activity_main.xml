@@ -23,7 +23,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="@string/descripcion" />
+                android:fontFamily="casual"
+                android:gravity="center"
+                android:text="@string/descripcion"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <ListView
                 android:id="@+id/lvItems"
@@ -35,7 +39,9 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@string/botonCunsultar" />
+                android:text="@string/botonCunsultar"
+                android:layout_gravity="center"
+                android:fontFamily="casual"/>
         </LinearLayout>
     </ScrollView>
 
