@@ -54,17 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
         initCompnents();
-
         fixSsl();
 
-        btnConsultar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                stringRequest();
-                //setDataToComponents();
-            }
-        });
+        setActions();
+        initThread();
 
     }
 
@@ -74,17 +67,39 @@ public class MainActivity extends AppCompatActivity {
         imgDog = findViewById(R.id.imgDog);
     }
 
-    private void callStringRequest(){
+    private void setActions(){
+        btnConsultar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        do{
-            stringRequest();
-        }while (urlImg.endsWith(".mp4") || urlImg.endsWith(".gif"));
+                stringRequest();
 
+            }
+        });
     }
+
+    private void initThread(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while(true){
+                    try {
+                        Thread.sleep(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    stringRequest();
+                }
+
+            }
+        }).start();
+    }
+
 
     private int stringRequest(){
 
-        if(!urlImg.endsWith(".mp4") && !urlImg.endsWith(".gif")){
+        if(!urlImg.endsWith(".mp4") && !urlImg.endsWith(".gif") && !urlImg.endsWith(".webm")){
             return 1;
         }
         else{
@@ -101,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                                 pesoImg = jsonObject.getString("fileSizeBytes");
                                 urlImg = jsonObject.getString("url");
 
-                                if(urlImg.endsWith(".mp4") || urlImg.endsWith(".gif")){
+                                if(urlImg.endsWith(".mp4") || urlImg.endsWith(".gif") || urlImg.endsWith(".webm")){
                                     stringRequest();
                                 }
                                 else{
@@ -128,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setDataToComponents(){
-        txtPrb.setText(pesoImg);
+        txtPrb.setText(urlImg);
         new DownLoadImageTask(imgDog).execute(urlImg);
 
     }
