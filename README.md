@@ -2,7 +2,7 @@
 
 "Random Dog" es una aplicación para dispositivos android creada con el lengaje Java.
 
-## Onjetivo
+## Objetivo
 
 Obtener información de perritos consumiento el API JSON https://random.dog/woof.json 
 
