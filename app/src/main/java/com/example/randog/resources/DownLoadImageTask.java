@@ -24,7 +24,7 @@ public class DownLoadImageTask extends AsyncTask<String,Void, Bitmap> {
             InputStream is = new URL(urlOfImage).openStream();
 
             logo = BitmapFactory.decodeStream(is);
-        }catch(Exception e){ 
+        }catch(Exception e){
             e.printStackTrace();
         }
         return logo;

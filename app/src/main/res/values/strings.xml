@@ -2,5 +2,5 @@
     <string name="app_name">randog</string>
     <string name="peso">Peso:</string>
     <string name="descripcion">Vamos a conocer mascotas...</string>
-    <string name="botonCunsultar">Nueva mascota</string>
+    <string name="botonCunsultar">Mostrar Perro</string>
 </resources>
