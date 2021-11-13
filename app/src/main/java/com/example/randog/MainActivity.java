@@ -1,5 +1,6 @@
 package com.example.randog;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -18,6 +19,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.randog.models.Perro;
 import com.example.randog.resources.Adaptador;
 import com.example.randog.resources.DownLoadImageTask;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import org.json.JSONException;
@@ -35,6 +41,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,10 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
     private String pesoImg="";
     private String urlImg =".mp4";
-    //Pruebas
+    private String uuid ="";
 
-
-
+    //Firebase
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     //
     static final String URL = "https://random.dog/woof.json";
     @Override
@@ -61,9 +69,10 @@ public class MainActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
         initCompnents();
-        llenarItems();
-        fixSsl();
 
+        fixSsl();
+        iniciarFirebase();
+        llenarItems();
         setActions();
 
         initThread();
@@ -74,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
         lvItems = (ListView) findViewById(R.id.lvItems);
 
         btnConsultar = (Button)  findViewById(R.id.btnConsultar);
+    }
+
+    private void iniciarFirebase() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Perros");
+
     }
 
     private void setActions(){
@@ -91,7 +106,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void llenarItems(){
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayPerros.clear();
+                for (DataSnapshot objSnapshot : snapshot.getChildren()) {
 
+                    adItemFromFriebase( objSnapshot.getValue(Perro.class));
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void initThread(){
@@ -101,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
                 while(true){
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(30000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -112,8 +143,17 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void adItemFromFriebase(Perro perro){
+        arrayPerros.add(perro);
+        adaptador = new Adaptador(this, arrayPerros);
+        lvItems.setAdapter(adaptador);
+    }
+
     private void addItem(){
-        arrayPerros.add(new Perro(pesoImg, urlImg));
+        Perro nuevoPerro = new Perro(pesoImg, urlImg, uuid);
+        arrayPerros.add(nuevoPerro);
+        databaseReference.child(uuid).setValue(nuevoPerro);
+
         adaptador = new Adaptador(this, arrayPerros);
         lvItems.setAdapter(adaptador);
     }
@@ -137,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(response);
                                 pesoImg = jsonObject.getString("fileSizeBytes");
                                 urlImg = jsonObject.getString("url");
+                                uuid = arrayPerros.size()+"";
 
                                 if(urlImg.endsWith(".mp4") || urlImg.endsWith(".gif") || urlImg.endsWith(".webm")){
                                     stringRequest();
@@ -154,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            int x= 0;
+
                         }
                     }
             );

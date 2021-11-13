@@ -51,7 +51,7 @@ public class Adaptador extends BaseAdapter {
 
         new DownLoadImageTask(imgDog).execute(perro.getUrl());
 
-        tvPesoImg.setText(perro.getFileSizeBytes());
+        tvPesoImg.setText("              "+perro.getFileSizeBytes() + " Bytes");
 
         return convertView;
     }

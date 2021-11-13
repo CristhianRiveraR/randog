@@ -22,19 +22,20 @@
                 android:id="@+id/tvDiagLA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="¡Conozcamos nuevas mascotas!" />
+                android:layout_margin="20dp"
+                android:text="@string/descripcion" />
 
             <ListView
                 android:id="@+id/lvItems"
                 android:layout_width="match_parent"
                 android:layout_height="526dp" />
+
             <Button
                 android:id="@+id/btnConsultar"
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Buscar" />
+                android:text="@string/botonCunsultar" />
         </LinearLayout>
     </ScrollView>
 

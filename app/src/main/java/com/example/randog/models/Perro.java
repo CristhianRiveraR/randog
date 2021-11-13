@@ -4,12 +4,19 @@ import java.io.Serializable;
 
 public class Perro implements Serializable {
     private String fileSizeBytes,
-                    url;
+                    url,
+                    uuid;
 
-    public Perro(String fileSizeBytes, String url){
+    public Perro(String fileSizeBytes, String url, String uuid){
         this.fileSizeBytes = fileSizeBytes;
         this.url = url;
+        this.uuid = uuid;
     }
+
+    public Perro(){
+
+    }
+
     public String getFileSizeBytes() {
         return fileSizeBytes;
     }
@@ -24,5 +31,13 @@ public class Perro implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
