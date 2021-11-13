@@ -20,11 +20,13 @@
             android:layout_height="wrap_content"
             android:text="@string/peso"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="casual"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvPesoImg"
-            android:textSize="16dp"/>
+            android:textSize="16dp"
+            android:fontFamily="casual"/>
     </LinearLayout>
 </LinearLayout>
